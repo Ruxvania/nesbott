@@ -6,7 +6,7 @@ export default {
 	name: "say",
 	description: 'Make the bot say something.',
 	async execute(message, args) {
-		if (isArgsVaild(args) == true && !censor(clean(arrayToString(args)), "report", "hardbanned", "gayleb")) {
+		if (isArgsVaild(args) == true && !censor(clean(arrayToString(args)), "report", "hardbanned", "gayleb", "tbcommand")) {
             tb.sendMessage(clean(arrayToString(args)));
         } else {
             tb.sendMessage("Invaild arguments!");

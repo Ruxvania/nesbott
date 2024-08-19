@@ -48,7 +48,8 @@ function censor(message, omitOrReport, ...filters) {
         hardbanned: /exe|forkie|runkit\.sh|^\*hugs|(?<!^)chat/img,
         link: /(?:http[s]?:\/\/.)?(?:www\.)?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/gm,
         gayleb: /^\s*![a-zA-Z]*/gm,
-        ping: /@everyone|@here|<@[0-9]+>/gi
+        ping: /@everyone|@here|<@[0-9]+>/gi,
+        tbcommand: /^\/\S+/img
     }
 
     switch (omitOrReport) {
@@ -85,9 +86,13 @@ function censor(message, omitOrReport, ...filters) {
 
 function arrayToString(array) {
     let string = ""
-    for (let i of array) {
-        string = string + " " + i;
-    }
+    array.forEach(function (value, i) {
+        if (i == 0) {
+            string = value;
+        } else {
+            string = string + " " + value;
+        }
+    })
     return string;
 }
 

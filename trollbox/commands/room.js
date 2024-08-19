@@ -8,6 +8,9 @@ export default {
 	async execute(message, args) {
 		if (isArgsVaild(args) == true && censor(arrayToString(args), "report", "hardbanned", "gayleb") == false) {
             tb.room = arrayToString(args);
+
+            console.log(tb.room);
+
             tb.sendMessage(`/room ${tb.room}`);
             setTimeout(() => {
                 if (tb.room !== tb.defaultRoom) {
