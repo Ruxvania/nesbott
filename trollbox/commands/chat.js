@@ -13,7 +13,7 @@ export default {
         
         } else if (tb.room == "atrium") {
             
-            tb.sendMessage(`${tb.prefix}c can't be used in atrium!`)
+            tb.sendMessage(`${tb.prefix}chat can't be used in atrium!`)
 
         } else {
             tb.chatbot = tb.chatbot == false ? true : false;
