@@ -9,6 +9,6 @@ export default {
             tb.sendMessage(`/room ${tb.room}`);
         }
 
-        console.log(`Ready! Logged in as ${tb.genName()}`);
+        console.log(`Logged in to Trollbox as ${tb.genName()}`);
     },
 };

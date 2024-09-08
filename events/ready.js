@@ -11,6 +11,6 @@ export default {
 		} catch(error){
 			console.log(error);
 		}
-		console.log(`Ready! Logged in as ${client.user.tag}`);
+		console.log(`Logged in to Discord as ${client.user.tag}`);
 	},
 };
