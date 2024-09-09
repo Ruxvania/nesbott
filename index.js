@@ -9,14 +9,7 @@ import { clean, __dirname, censor } from "./common-functions.js";
 import io from "socket.io-client";
 import tbHeaders from 'trollbox-headers';
 
-// Client Intents
-const client = new Client({
-	intents: [
-		GatewayIntentBits.Guilds,
-		GatewayIntentBits.GuildMessages,
-		GatewayIntentBits.MessageContent,
-	],
-});
+
 
 // Prepare Database
 const namespace = cls.createNamespace('namespace');
@@ -59,6 +52,22 @@ const Block = sequelize.define('block', {
 	tbNick: Sequelize.TEXT,
 	tbColor: Sequelize.TEXT,
 	comment: Sequelize.TEXT
+});
+
+Block.sync();
+TbMessage.sync();
+Message.sync();
+
+
+
+// Discord
+// Client Intents
+const client = new Client({
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent,
+	],
 });
 
 // Prepare commands
@@ -105,11 +114,9 @@ for (const file of eventFiles) {
 // Login to Discord
 client.login(config.token);
 
-Block.sync()
 
-// Login to Trollbox
-TbMessage.sync()
 
+// Trollbox
 const tb = {
 	channelId: config.tbChannelId,
 	defaultName: config.tbDefaultName,
@@ -182,13 +189,12 @@ const tb = {
 	}
 };
 
-export { Message, TbMessage, Block, tb, client };
-
 await tb.refreshBlocks();
 
 tb.eventsPath = path.join(__dirname, 'trollbox/events');
 tb.eventFiles = fs.readdirSync(tb.eventsPath).filter(file => file.endsWith('.js'));
 
+// Login to Trollbox
 tb.socket = io('http://www.windows93.net:8081', tbHeaders.headers());
 
 for (const file of tb.eventFiles) {
@@ -219,3 +225,8 @@ for (const file of tb.commandFiles) {
 		}
 	)
 }
+
+
+
+// Exports
+export { Message, TbMessage, Block, tb, client };
