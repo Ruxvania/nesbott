@@ -74,14 +74,14 @@ for (const folder of commandFolders) {
 	for (const file of commandFiles) {
 		const filePath = path.join(commandsPath, file);
 		import(filePath).then(
-			function(command) {
+			function (command) {
 				if ('data' in command.default && 'execute' in command.default) {
 					client.commands.set(command.default.data.name, command.default);
 				} else {
 					console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
 				}
 			}
-		  );
+		);
 	}
 }
 
@@ -112,8 +112,8 @@ TbMessage.sync()
 
 const tb = {
 	channelId: config.tbChannelId,
-	defaultName: config.tbDefaultName, 
-	defaultRoom: config.tbDefaultRoom, 
+	defaultName: config.tbDefaultName,
+	defaultRoom: config.tbDefaultRoom,
 	defaultColor: config.tbDefaultColor,
 	prefix: config.tbPrefix,
 	home: "91284083c1e557374ca4495371d875506d5ddbfc2891dceae56f6ba0cc3a8c63",
@@ -132,19 +132,23 @@ const tb = {
 	},
 
 	sendTbMessageToDiscord: function (message) {
-		tb.channelId.forEach(id => {
-			client.channels.fetch(id).then(
-				function (channel) { channel.send(`**${censor(clean(message.nick), "omit", "link", "ping")}:** ${censor(clean(message.msg), "omit", "link", "ping")}`.substring(0, 1000)); }
-			);
-		})
+		if (client.isReady()) {
+			tb.channelId.forEach(id => {
+				client.channels.fetch(id).then(
+					function (channel) { channel.send(`**${censor(clean(message.nick), "omit", "link", "ping")}:** ${censor(clean(message.msg), "omit", "link", "ping")}`.substring(0, 1000)); }
+				);
+			})
+		}
 	},
 
 	sendDiscordMessage: function (message) {
-		tb.channelId.forEach(id => {
-			client.channels.fetch(id).then(
-				function (channel) { channel.send(message.substring(0, 1000)); }
-			);
-		})
+		if (client.isReady()) {
+			tb.channelId.forEach(id => {
+				client.channels.fetch(id).then(
+					function (channel) { channel.send(message.substring(0, 1000)); }
+				);
+			})
+		}
 	},
 
 	genName: function () {
@@ -156,14 +160,14 @@ const tb = {
 		let blockArray = await Block.findAll({
 			attributes: ['tbHome', 'tbNick', 'tbColor'],
 		});
-		
+
 		this.blocked = {};
 		this.blocked.home = [];
 		this.blocked.nick = [];
 		this.blocked.color = [];
-		
+
 		for (let i in blockArray) {
-		
+
 			if (blockArray[i].tbHome) {
 				this.blocked.home.push(blockArray[i].tbHome);
 			}
@@ -173,7 +177,7 @@ const tb = {
 			if (blockArray[i].tbColor) {
 				this.blocked.color.push(blockArray[i].tbColor);
 			}
-		
+
 		}
 	}
 };
@@ -206,8 +210,8 @@ tb.commandFiles = fs.readdirSync(tb.commandsPath).filter(file => file.endsWith('
 for (const file of tb.commandFiles) {
 	const filePath = path.join(tb.commandsPath, file);
 	import(filePath).then(
-		function (command){
-			if ( 'name' in command.default && 'execute' in command.default) {
+		function (command) {
+			if ('name' in command.default && 'execute' in command.default) {
 				tb.commands[command.default.name] = command.default;
 			} else {
 				console.log(`[WARNING] The command at ${filePath} is missing a required "name" or "execute" property.`);
