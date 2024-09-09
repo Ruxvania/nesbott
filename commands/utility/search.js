@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { Op } from 'sequelize';
 import { Message, TbMessage } from '../../index.js';
+import { EmbedBuilder } from 'discord.js';
 
 export default {
     category: 'utility',
@@ -19,14 +20,23 @@ export default {
         .addStringOption(option =>
             option.setName('content')
                 .setDescription('The string to search for')
-                .setRequired(true)),
+                .setRequired(true))
+        .addIntegerOption(option =>
+            option.setName('page')
+                .setDescription('The page to view')),
+
+
 
     async execute(interaction) {
         try {
+
             const Database = interaction.options.getString('database') == "Message" ? Message : TbMessage;
             const content = interaction.options.getString('content');
+            const page = interaction.options.getInteger('page') || 1;
+            const offset = (page - 1) * 25
+
             const messageList = await Database.findAll({
-                attributes: ['content'],
+                attributes: ['content', 'author', 'displayName'],
                 where: {
                     content: {
                         [Op.like]: `%${content}%`,
@@ -34,15 +44,47 @@ export default {
                 },
             });
 
-            const messageArray = messageList.map(text => text.content) || 'No messages logged.';
-            let messageString = "";
+            const replyEmbed = new EmbedBuilder()
+                .setColor(0xFFD700)
+                .setTitle('Results for "' + content + '"')
+                .setAuthor({ name: 'Mrs. Nesbott' })
+                .setTimestamp()
+                .setFooter({ text: '/search' });
 
-            function messageArrayToString(item){
-                messageString = messageString + '\n\n' + item;
+            let pagination = false;
+            let pages;
+            let currentPage = page;
+
+            if (messageList.length > offset) {
+                for (let i = offset; i < offset + 25 && i < messageList.length; i++) {
+                    let name;
+                    if (messageList[i].displayName)
+                        name = messageList[i].displayName;
+                    else {
+                        name = messageList[i].author.toString();
+                    }
+                    let value;
+                    if (messageList[i].content.length <= 200) {
+                        value = messageList[i].content;
+                    } else {
+                        value = messageList[i].content.substring(0, 197) + "...";
+                    }
+                    replyEmbed.addFields({
+                        name: name,
+                        value: value,
+                        inline: true
+                    });
+                }
+                pages = Math.ceil(messageList.length / 25);
+                if (pages > 1) {
+                    pagination = true;
+                    replyEmbed.setFooter({ text: '/search • Page ' + currentPage + ' of ' + pages });
+                };
+            } else {
+                replyEmbed.addFields({ name: 'No results found.', value: ':<', inline: true });
             }
-            messageArray.forEach(messageArrayToString);
 
-            await interaction.reply(messageString.substring(0,2000) !== "" ? messageString.substring(0,2000) : "No results.");
+            await interaction.reply({ embeds: [replyEmbed] });
         } catch (error) {
             console.log(error);
         }
