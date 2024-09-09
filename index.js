@@ -31,9 +31,7 @@ const sequelize = new Sequelize({
 });
 
 const Message = sequelize.define('message', {
-	content: {
-		type: Sequelize.TEXT,
-	},
+	content: Sequelize.TEXT,
 	message: {
 		type: Sequelize.INTEGER,
 		unique: true,
@@ -41,6 +39,9 @@ const Message = sequelize.define('message', {
 	author: Sequelize.INTEGER,
 	guild: Sequelize.INTEGER,
 	channel: Sequelize.INTEGER,
+	displayName: Sequelize.TEXT,
+	username: Sequelize.TEXT,
+	nsfw: Sequelize.BOOLEAN,
 });
 
 const TbMessage = sequelize.define('tbMessage', {

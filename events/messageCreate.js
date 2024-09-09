@@ -33,12 +33,23 @@ export default {
 		if (message.author.bot == false &&
 			(message.content.split(" ").length >= 4 && message.content.split(" ").length <= 25 ||
 				Array.isArray(message.content.match(/(?:http[s]?:\/\/.)?(?:www\.)?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/m)))) {
+
+			let nsfw;
+			if (message.channel.nsfw == false) {
+				nsfw = false;
+			} else {
+				nsfw = true;
+			}
+			
 			const loggedMessage = await Message.create({
 				content: message.content,
 				message: message.id,
 				author: message.author.id,
 				guild: message.guild.id,
 				channel: message.channel.id,
+				displayName: message.author.displayName,
+				username: message.author.username,
+				nsfw: nsfw,
 			})
 		}
 
