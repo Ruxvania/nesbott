@@ -33,16 +33,61 @@ export default {
             const Database = interaction.options.getString('database') == "Message" ? Message : TbMessage;
             const content = interaction.options.getString('content');
             const page = interaction.options.getInteger('page') || 1;
-            const offset = (page - 1) * 25
+            const offset = (page - 1) * 25;
 
-            const messageList = await Database.findAll({
-                attributes: ['content', 'author', 'displayName'],
-                where: {
-                    content: {
-                        [Op.like]: `%${content}%`,
+            let messageList;
+            let names;
+            let values;
+            let pagination = false;
+            let pages;
+            let currentPage = page;
+
+            if (Database == Message) {
+                messageList = await Database.findAll({
+                    attributes: ['content', 'author', 'displayName'],
+                    where: {
+                        content: {
+                            [Op.like]: `%${content}%`,
+                        },
                     },
-                },
-            });
+                });
+
+                names = messageList.map(message => {
+                    if (message.displayName) {
+                        return message.displayName;
+                    } else {
+                        return message.author;
+                    }
+                })
+
+                values = messageList.map(message => {
+                    return message.content;
+                })
+
+            } else if (Database == TbMessage) {
+                messageList = await Database.findAll({
+                    attributes: ['content', 'nick', 'home'],
+                    where: {
+                        content: {
+                            [Op.like]: `%${content}%`,
+                        },
+                    },
+                });
+
+                names = messageList.map(message => {
+                    if (message.nick) {
+                        return message.nick;
+                    } else {
+                        return message.home;
+                    }
+                })
+
+                values = messageList.map(message => {
+                    return message.content;
+                })
+            }
+
+            console.log(messageList);
 
             const replyEmbed = new EmbedBuilder()
                 .setColor(0xFFD700)
@@ -51,38 +96,34 @@ export default {
                 .setTimestamp()
                 .setFooter({ text: '/search' });
 
-            let pagination = false;
-            let pages;
-            let currentPage = page;
-
-            if (messageList.length > offset) {
-                for (let i = offset; i < offset + 25 && i < messageList.length; i++) {
-                    let name;
-                    if (messageList[i].displayName)
-                        name = messageList[i].displayName;
-                    else {
-                        name = messageList[i].author.toString();
+            function populateEmbed(nameArray, valueArray, offset) {
+                if (nameArray.length > offset) {
+                    for (let i = offset; i < offset + 25 && i < nameArray.length; i++) {
+                        if (valueArray[i].length > 200) {
+                            replyEmbed.addFields({
+                                name: nameArray[i].toString().substring(0, 50),
+                                value: valueArray[i].toString().substring(0, 197) + "...",
+                                inline: true
+                            });
+                        } else {
+                            replyEmbed.addFields({
+                                name: nameArray[i].toString(),
+                                value: valueArray[i].toString(),
+                                inline: true
+                            });
+                        }
                     }
-                    let value;
-                    if (messageList[i].content.length <= 200) {
-                        value = messageList[i].content;
-                    } else {
-                        value = messageList[i].content.substring(0, 197) + "...";
-                    }
-                    replyEmbed.addFields({
-                        name: name,
-                        value: value,
-                        inline: true
-                    });
+                    pages = Math.ceil(nameArray.length / 25);
+                    if (pages > 1) {
+                        pagination = true;
+                        replyEmbed.setFooter({ text: '/search • Page ' + currentPage + ' of ' + pages });
+                    };
+                } else {
+                    replyEmbed.addFields({ name: 'No results found.', value: ':<', inline: true });
                 }
-                pages = Math.ceil(messageList.length / 25);
-                if (pages > 1) {
-                    pagination = true;
-                    replyEmbed.setFooter({ text: '/search • Page ' + currentPage + ' of ' + pages });
-                };
-            } else {
-                replyEmbed.addFields({ name: 'No results found.', value: ':<', inline: true });
             }
+
+            populateEmbed(names, values, offset);
 
             await interaction.reply({ embeds: [replyEmbed] });
         } catch (error) {
