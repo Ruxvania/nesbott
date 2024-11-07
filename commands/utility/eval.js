@@ -4,7 +4,7 @@ import config from '../../config.json' with {type: 'json'};
 import { SlashCommandBuilder } from 'discord.js';
 import Sequelize from 'sequelize';
 import { Op } from 'sequelize';
-import { Message, TbMessage, Block, tb } from '../../index.js';
+import { Message, TbMessage, Block } from '../../database.js';
 
 export default {
 	category: 'utility',
@@ -16,7 +16,7 @@ export default {
 			option.setName('code')
 				.setDescription('The code to run')
 				.setRequired(true)),
-	async execute(interaction) {
+	async execute(data, interaction) {
 		if (interaction.user.id == config.ownerId) {
 			try {
 				const code = interaction.options.getString('code');

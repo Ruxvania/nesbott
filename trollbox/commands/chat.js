@@ -1,23 +1,21 @@
-import { tb } from '../../index.js';
-
 export default {
 	cooldown: 2,
-    localCooldown: tb.chatbot ? 10 : 100,
+    localCooldown: 10,
 	name: "chat",
 	description: "Can't be used in atrium; toggle the bot's talking.",
-	async execute(message, args) {
-		if (tb.chatbot) {
+	async execute(data, message, args) {
+		if (data.tb.chatbot) {
 
-            tb.chatbot = tb.chatbot == false ? true : false;
-            tb.sendMessage("Chatbot disabled.");
+            data.tb.chatbot = data.tb.chatbot == false ? true : false;
+            data.tb.sendMessage("Chatbot disabled.");
         
-        } else if (tb.room == "atrium") {
+        } else if (data.tb.room == "atrium") {
             
-            tb.sendMessage(`${tb.prefix}chat can't be used in atrium!`)
+            data.tb.sendMessage(`${data.tb.prefix}chat can't be used in atrium!`)
 
         } else {
-            tb.chatbot = tb.chatbot == false ? true : false;
-            tb.sendMessage("Chatbot enabled.");
+            data.tb.chatbot = data.tb.chatbot == false ? true : false;
+            data.tb.sendMessage("Chatbot enabled.");
         }
 	},
 };

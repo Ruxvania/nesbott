@@ -1,11 +1,11 @@
 import { Events } from 'discord.js';
-import { Message } from '../index.js';
+import { Message } from '../database.js';
 import { createSplicedMessage } from "../common-functions.js";
 import config from "../config.json" with {type: 'json'};
 
 export default {
 	name: Events.MessageCreate,
-	async execute(message) {
+	async execute(data, message) {
 
 		if (message.member != message.client.user.id && message.member != 1163315574357635173) {
 			console.log(`[${message.channel.name}] ${message.author.displayName}: ${message.content}`);

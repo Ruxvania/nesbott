@@ -6,7 +6,7 @@ export default {
 	data: new SlashCommandBuilder()
 		.setName('restart')
 		.setDescription('Restarts the bot.'),
-	async execute(interaction) {
+	async execute(data, interaction) {
 		await interaction.reply('Restarting...');
 		process.exit();
 	},

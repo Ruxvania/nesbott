@@ -9,7 +9,7 @@ export default {
 			option.setName('command')
 				.setDescription('The command to reload.')
 				.setRequired(true)),
-	async execute(interaction) {
+	async execute(data, interaction) {
 		const commandName = interaction.options.getString('command', true).toLowerCase();
 		const command = interaction.client.commands.get(commandName);
 

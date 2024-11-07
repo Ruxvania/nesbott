@@ -1,6 +1,6 @@
 import config from '../../config.json' with {type: 'json'};
 import { SlashCommandBuilder } from 'discord.js';
-import { Block, tb } from '../../index.js';
+import { Block } from '../../database.js';
 import { Op } from 'sequelize';
 
 export default {
@@ -43,7 +43,7 @@ export default {
                     option.setName('id')
                         .setDescription('The ID of the block to remove.')
                         .setRequired(true))),
-    async execute(interaction) {
+    async execute(data, interaction) {
         if (interaction.user.id == config.ownerId) {
 
             switch (interaction.options.getSubcommand()) {
@@ -104,7 +104,7 @@ export default {
                             comment: comment,
                         })
 
-                        tb.refreshBlocks();
+                        data.tb.refreshBlocks();
 
                         await interaction.reply('✅');
 
@@ -128,7 +128,7 @@ export default {
                             },
                         });
 
-                        tb.refreshBlocks();
+                        data.tb.refreshBlocks();
 
                         await interaction.reply("✅");
 

@@ -10,13 +10,15 @@
   "author": "Ruxvania",
   "license": "ISC",
   "dependencies": {
+    "bufferutil": "^4.0.8",
     "cls-hooked": "^4.2.2",
     "discord.js": "^14.14.1",
     "html-entities": "^2.5.2",
     "sequelize": "^6.37.3",
     "socket.io-client": "^2.5.0",
     "sqlite3": "^5.1.7",
-    "trollbox-headers": "^0.0.4"
+    "trollbox-headers": "^0.0.4",
+    "zlib-sync": "^0.1.9"
   },
   "devDependencies": {
     "globals": "^15.3.0"

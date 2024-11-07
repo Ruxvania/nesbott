@@ -1,14 +1,12 @@
-import { tb } from '../../index.js';
-
 export default {
     name: "_connected",
     async execute(data) {
-        tb.socket.emit("user joined", tb.genName(), tb.color, "", "");
+        data.tb.socket.emit("user joined", data.tb.genName(), data.tb.color, "", "");
 
-        if (tb.room !== "atrium") {
-            tb.sendMessage(`/room ${tb.room}`);
+        if (data.tb.room !== "atrium") {
+            data.tb.sendMessage(`/room ${data.tb.room}`);
         }
 
-        console.log(`Logged in to Trollbox as ${tb.genName()}`);
+        console.log(`Logged in to Trollbox as ${data.tb.genName()}`);
     },
 };

@@ -7,7 +7,7 @@ export default {
 	data: new SlashCommandBuilder()
 		.setName('source')
 		.setDescription('Shows the source code of the bot.'),
-	async execute(interaction) {
+	async execute(data, interaction) {
 		await interaction.reply(config.sourceLink);
 	},
 };

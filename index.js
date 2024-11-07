@@ -1,67 +1,19 @@
 // Imports
 import fs from 'node:fs';
 import path from 'node:path';
-import cls from 'cls-hooked';
-import Sequelize from 'sequelize';
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
 import config from './config.json' with {type: 'json'};
-import { clean, __dirname, censor } from "./common-functions.js";
+import { clean, censor } from "./common-functions.js";
 import io from "socket.io-client";
 import tbHeaders from 'trollbox-headers';
-
-
-
-// Prepare Database
-const namespace = cls.createNamespace('namespace');
-Sequelize.useCLS(namespace);
-
-const sequelize = new Sequelize({
-	host: 'localhost',
-	dialect: 'sqlite',
-	logging: config.dbLogging ? console.log : false,
-	// SQLite only
-	storage: 'database.sqlite',
-});
-
-const Message = sequelize.define('message', {
-	content: Sequelize.TEXT,
-	message: {
-		type: Sequelize.INTEGER,
-		unique: true,
-	},
-	author: Sequelize.INTEGER,
-	guild: Sequelize.INTEGER,
-	channel: Sequelize.INTEGER,
-	displayName: Sequelize.TEXT,
-	username: Sequelize.TEXT,
-	nsfw: Sequelize.BOOLEAN,
-});
-
-const TbMessage = sequelize.define('tbMessage', {
-	content: {
-		type: Sequelize.TEXT,
-	},
-	home: Sequelize.STRING,
-	nick: Sequelize.TEXT,
-});
-
-const Block = sequelize.define('block', {
-	discordId: Sequelize.INTEGER,
-	discordDisplay: Sequelize.STRING,
-	tbHome: Sequelize.STRING,
-	tbNick: Sequelize.TEXT,
-	tbColor: Sequelize.TEXT,
-	comment: Sequelize.TEXT
-});
-
-Block.sync();
-TbMessage.sync();
-Message.sync();
+import { Message, TbMessage, Block } from './database.js';
 
 
 
 // Discord
 // Client Intents
+console.log("Preparing Discord Client...");
+
 const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
@@ -71,21 +23,27 @@ const client = new Client({
 });
 
 // Prepare commands
+console.log("Preparing Discord commands...")
+
 client.cooldowns = new Collection();
 
 client.commands = new Collection();
-const foldersPath = path.join(__dirname, 'commands');
+const foldersPath = path.join(import.meta.dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
 
 for (const folder of commandFolders) {
 	const commandsPath = path.join(foldersPath, folder);
 	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+	console.log(commandFiles);
 	for (const file of commandFiles) {
 		const filePath = path.join(commandsPath, file);
+		console.log(filePath);
 		import(filePath).then(
 			function (command) {
+				console.log(filePath);
 				if ('data' in command.default && 'execute' in command.default) {
 					client.commands.set(command.default.data.name, command.default);
+					console.log("(Discord Command) " + command.default.data.name);
 				} else {
 					console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
 				}
@@ -95,7 +53,9 @@ for (const folder of commandFolders) {
 }
 
 // Prepare events
-const eventsPath = path.join(__dirname, 'events');
+console.log("Preparing Discord events...")
+
+const eventsPath = path.join(import.meta.dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
 for (const file of eventFiles) {
@@ -103,15 +63,19 @@ for (const file of eventFiles) {
 	import(filePath).then(
 		function (event) {
 			if (event.default.once) {
-				client.once(event.default.name, (...args) => event.default.execute(...args));
+				client.once(event.default.name, (...args) => event.default.execute({client, tb}, ...args));
+				console.log("(Discord Event) " + event.default.name);
 			} else {
-				client.on(event.default.name, (...args) => event.default.execute(...args));
+				client.on(event.default.name, (...args) => event.default.execute({client, tb}, ...args));
+				console.log("(Discord Event) " + event.default.name);
 			}
 		}
 	)
 }
 
 // Login to Discord
+console.log("Logging into Discord...");
+
 client.login(config.token);
 
 
@@ -191,7 +155,7 @@ const tb = {
 
 await tb.refreshBlocks();
 
-tb.eventsPath = path.join(__dirname, 'trollbox/events');
+tb.eventsPath = path.join(import.meta.dirname, 'trollbox/events');
 tb.eventFiles = fs.readdirSync(tb.eventsPath).filter(file => file.endsWith('.js'));
 
 // Login to Trollbox
@@ -201,7 +165,7 @@ for (const file of tb.eventFiles) {
 	const filePath = path.join(tb.eventsPath, file);
 	import(filePath).then(
 		function (event) {
-			tb.socket.on(event.default.name, (...args) => event.default.execute(...args));
+			tb.socket.on(event.default.name, (...args) => event.default.execute({client, tb}, ...args));
 		}
 	)
 }
@@ -210,7 +174,7 @@ tb.globalCooldowns = {};
 tb.localCooldowns = {};
 
 tb.commands = {};
-tb.commandsPath = path.join(__dirname, 'trollbox/commands');
+tb.commandsPath = path.join(import.meta.dirname, 'trollbox/commands');
 tb.commandFiles = fs.readdirSync(tb.commandsPath).filter(file => file.endsWith('.js'));
 
 for (const file of tb.commandFiles) {

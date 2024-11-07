@@ -1,11 +1,10 @@
-import { tb } from '../../index.js';
 import { clean } from '../../common-functions.js';
 
 export default {
     name: "user joined",
-    async execute(data) {
+    async execute(data, message) {
         
-        tb.sendDiscordMessage(`**${clean(data.nick)}** *has entered teh trollbox*`);
+        data.tb.sendDiscordMessage(`**${clean(message.nick)}** *has entered teh trollbox*`);
 
     },
 };

@@ -1,18 +1,16 @@
-import { tb } from '../../index.js';
-
 export default {
 	cooldown: 2,
 	name: "ogroom",
 	description: "Change the bot's room back to the original room.",
 	async execute(message, args) {
-		if (tb.room !== tb.defaultRoom) {
-            tb.room = tb.defaultRoom;
-            tb.sendMessage(`/room ${tb.room}`); 
+		if (data.tb.room !== data.tb.defaultRoom) {
+            data.tb.room = data.tb.defaultRoom;
+            data.tb.sendMessage(`/room ${data.tb.room}`); 
         } else {
-            tb.sendMessage(`I am already in ${tb.room}.`);
+            data.tb.sendMessage(`I am already in ${data.tb.room}.`);
         }
-		if (tb.room == "atrium") {
-			tb.chatbot = false;
+		if (data.tb.room == "atrium") {
+			data.tb.chatbot = false;
 		}
 	},
 };

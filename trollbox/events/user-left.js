@@ -1,13 +1,12 @@
-import { tb } from '../../index.js';
 import { clean } from '../../common-functions.js';
 
 export default {
     name: "user left",
-    async execute(data) {
+    async execute(data, message) {
 
-        tb.sendDiscordMessage(`**${clean(data.nick)}** *has left teh trollbox*`);
+        data.tb.sendDiscordMessage(`**${clean(message.nick)}** *has left teh trollbox*`);
         
-        if (data.nick == tb.genName()) {
+        if (message.nick == data.tb.genName()) {
 
             console.log("Trollbox bot disconnected.");
             Process.emit('SIGINT');

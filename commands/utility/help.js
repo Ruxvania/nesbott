@@ -6,7 +6,7 @@ export default {
 	data: new SlashCommandBuilder()
 		.setName('help')
 		.setDescription('Information about the bot.'),
-	async execute(interaction) {
+	async execute(data, interaction) {
 
 		let commands = "";
 

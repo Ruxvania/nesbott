@@ -1,5 +1,3 @@
-import fs from 'node:fs';
-import path from 'node:path';
 import { SlashCommandBuilder } from 'discord.js';
 
 export default {
@@ -19,7 +17,7 @@ export default {
         .addStringOption(option =>
             option.setName('word')
                 .setDescription('The word to merge the messages at')),
-	async execute(interaction) {
+	async execute(data, interaction) {
 
         function getRandomInteger(min, max) {
             return Math.floor(Math.random() * (max - min + 1) ) + min;

@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { Op } from 'sequelize';
-import { Message, TbMessage } from '../../index.js';
+import { Message, TbMessage } from '../../database.js';
 import { EmbedBuilder } from 'discord.js';
 
 export default {
@@ -27,7 +27,7 @@ export default {
 
 
 
-    async execute(interaction) {
+    async execute(data, interaction) {
         try {
 
             const Database = interaction.options.getString('database') == "Message" ? Message : TbMessage;
