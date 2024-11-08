@@ -11,6 +11,7 @@ export default {
 				.setDescription('The message to send')
 				.setRequired(true)),
 	async execute(data, interaction) {
+		console.log(data.tb)
         data.tb.sendMessage(`${interaction.user.displayName}: ${interaction.options.getString('message')}`);
         await interaction.reply({ content: '✅', ephemeral: true });
 	},
