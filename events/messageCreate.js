@@ -1,6 +1,6 @@
 import { Events } from 'discord.js';
 import { Message } from '../database.js';
-import { createSplicedMessage } from "../common-functions.js";
+import { createSplicedMessage, generateNyaReply } from "../common-functions.js";
 import config from "../config.json" with {type: 'json'};
 
 export default {
@@ -10,8 +10,9 @@ export default {
 		if (message.member != message.client.user.id && message.member != 1163315574357635173) {
 			console.log(`[${message.channel.name}] ${message.author.displayName}: ${message.content}`);
 
-			if (message.content.search(/meow/i) >= 0 || message.content.search(/nya/i) >= 0) {
-				message.reply("Nya~");
+			if (message.content.search(/meow/i) >= 0 || message.content.search(/nya/i) >= 0 ||
+			message.content.search(/:3/i) >= 0) {
+				message.reply(generateNyaReply());
 			} else if (config.nesbottChannelId.some(id => id == message.channel.id)) {
 
 				try {

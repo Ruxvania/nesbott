@@ -5,18 +5,25 @@ import { decode } from "html-entities";
 import config from './config.json' with {type: 'json'};
 
 
-function getRandomInteger(min, max) {
+export function getRandomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function clean(message) {
+export function generateNyaReply() {
+    const replyPrefixes = ["Nya", "Meow", ":3"];
+    const replySuffixes = ["~", "?", "!"];
+    const randomReply = replyPrefixes[getRandomInteger(0, replyPrefixes.length - 1)] + replySuffixes[getRandomInteger(0, replySuffixes.length - 1)];
+    return randomReply;
+};
+
+export function clean(message) {
     message = message.trim();
     message = decode(message);
     message = message.replace(/<\/?[a-z][a-z0-9]*[^<>]*>|<!--.*?-->/img, "");
     return message;
 }
 
-function isArgsVaild(array) {
+export function isArgsVaild(array) {
     if (!Array.isArray(array) || !array.length) {
         return false;
     } else if (typeof array[0] == "string") {
@@ -30,7 +37,7 @@ function isArgsVaild(array) {
     }
 }
 
-function isStringVaild(string) {
+export function isStringVaild(string) {
     if (typeof string === 'string' || string instanceof String) {
         if (string.replace(/\s{1,}/g, "") == "") {
             return false;
@@ -42,7 +49,7 @@ function isStringVaild(string) {
     }
 }
 
-function censor(message, omitOrReport, ...filters) {
+export function censor(message, omitOrReport, ...filters) {
     const filterRegex = {
         banned: /discord|sonic|fortnite|among us|corona|roblox/gi,
         hardbanned: /exe|forkie|runkit\.sh|^\*hugs|discord/img,
@@ -84,7 +91,7 @@ function censor(message, omitOrReport, ...filters) {
     return message;
 }
 
-function arrayToString(array) {
+export function arrayToString(array) {
     let string = ""
     array.forEach(function (value, i) {
         if (i == 0) {
@@ -96,7 +103,7 @@ function arrayToString(array) {
     return string;
 }
 
-function combineMessages(message1, message2, combineWord) {
+export function combineMessages(message1, message2, combineWord) {
     message1 = message1.split(" ");
     message2 = message2.split(" ");
     combineWord = combineWord ?? message1.at(getRandomInteger(0, message1.length - 1));
@@ -126,7 +133,7 @@ function combineMessages(message1, message2, combineWord) {
     }
 }
 
-async function createSplicedMessage(message, Database, splices, tries) {
+export async function createSplicedMessage(message, Database, splices, tries) {
     tries = tries === undefined ? 5 : tries;
     let messageResult;
     for (let i = 1; i <= tries; i++) {
@@ -230,11 +237,9 @@ async function createSplicedMessage(message, Database, splices, tries) {
     }
 }
 
-const __filename = fileURLToPath(import.meta.url);
+export const __filename = fileURLToPath(import.meta.url);
 
-const __dirname = path.dirname(__filename);
-
-export { getRandomInteger, clean, isArgsVaild, arrayToString, combineMessages, createSplicedMessage, censor, __filename, __dirname };
+export const __dirname = path.dirname(__filename);
 
 
 

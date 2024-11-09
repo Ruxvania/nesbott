@@ -1,6 +1,6 @@
 import { tb } from '../../index.js';
 import { TbMessage } from '../../database.js';
-import { clean, createSplicedMessage, censor } from '../../common-functions.js';
+import { clean, createSplicedMessage, censor, generateNyaReply } from '../../common-functions.js';
 
 export default {
     name: "message",
@@ -73,8 +73,9 @@ export default {
                 }
 
             }
-            if (cleanMessage.search(/meow/gi) >= 0 || cleanMessage.search(/nya/gi) >= 0) {
-                data.tb.sendMessage("Nya~");
+            if (cleanMessage.search(/meow/gi) >= 0 || cleanMessage.search(/nya/gi) >= 0 ||
+            cleanMessage.search(/:3/gi) >= 0) {
+                data.tb.sendMessage(generateNyaReply());
             }
             if (message.nick !== "Hibot" &&
                 message.nick !== "anonymous" &&
