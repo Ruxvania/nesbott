@@ -47,3 +47,10 @@ export const Block = sequelize.define('block', {
 	comment: Sequelize.TEXT
 });
 Block.sync();
+
+export const DiscordGuildSetting = sequelize.define('discordguildsetting', {
+	guildId: Sequelize.INTEGER,
+	setting: Sequelize.STRING,
+	value: Sequelize.STRING
+});
+DiscordGuildSetting.sync();
