@@ -189,8 +189,3 @@ for (const file of tb.commandFiles) {
 		}
 	)
 }
-
-
-
-// Exports
-export { Message, TbMessage, Block, tb, client };
