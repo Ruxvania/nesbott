@@ -1,4 +1,3 @@
-import { tb } from '../../index.js';
 import { TbMessage } from '../../database.js';
 import { clean, createSplicedMessage, censor, generateNyaReply } from '../../common-functions.js';
 

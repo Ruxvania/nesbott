@@ -1,7 +1,7 @@
 // Imports
 import fs from 'node:fs';
 import path from 'node:path';
-import { Client, Collection, GatewayIntentBits } from 'discord.js';
+import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
 import config from './config.json' with {type: 'json'};
 import { clean, censor } from "./common-functions.js";
 import io from "socket.io-client";
@@ -19,6 +19,11 @@ const client = new Client({
 		GatewayIntentBits.Guilds,
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.DirectMessages,
+	],
+	partials: [
+		Partials.Channel,
+		Partials.Message,
 	],
 });
 

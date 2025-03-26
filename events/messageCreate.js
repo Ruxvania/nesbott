@@ -7,13 +7,15 @@ export default {
 	name: Events.MessageCreate,
 	async execute(data, message) {
 
-		if (message.member != message.client.user.id && message.member != 1163315574357635173) {
-			console.log(`[${message.channel.name}] ${message.author.displayName}: ${message.content}`);
+		console.log(`[${message.channel.name}] ${message.author.displayName}: ${message.content}`);
 
-			if (message.content.search(/meow/i) >= 0 || message.content.search(/nya/i) >= 0 ||
+		if (message.author.id != 1163315574357635173 &&
+		message.author.id != 1251210562826928251) {
+			if (message.content.search(/meow/i) >= 0 ||
+			message.content.search(/nya/i) >= 0 ||
 			message.content.search(/:3/i) >= 0) {
 				message.reply(generateNyaReply());
-			} else if (config.nesbottChannelId.some(id => id == message.channel.id)) {
+			} else if (config.nesbottChannelId.some(id => id == message.channel.id) || message.channel.type == 1 ) { // If type is 1, it is DM
 
 				try {
 					let messageReply = await createSplicedMessage(message.content, Message);
@@ -42,7 +44,7 @@ export default {
 				nsfw = true;
 			}
 			
-			const loggedMessage = await Message.create({
+			await Message.create({
 				content: message.content,
 				message: message.id,
 				author: message.author.id,
