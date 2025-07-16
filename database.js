@@ -14,7 +14,8 @@ const sequelize = new Sequelize({
 	storage: 'database.sqlite',
 });
 
-export const Message = sequelize.define('message', {
+// Messages collected from Discord
+export const Message = sequelize.define('discord_message', {
 	content: Sequelize.TEXT,
 	message: {
 		type: Sequelize.INTEGER,
@@ -29,7 +30,8 @@ export const Message = sequelize.define('message', {
 });
 Message.sync();
 
-export const TbMessage = sequelize.define('tbMessage', {
+// Messages collected from Trollbox
+export const TbMessage = sequelize.define('trollbox_message', {
 	content: {
 		type: Sequelize.TEXT,
 	},
@@ -38,6 +40,7 @@ export const TbMessage = sequelize.define('tbMessage', {
 });
 TbMessage.sync();
 
+// Users banned from the bot
 export const Block = sequelize.define('block', {
 	discordId: Sequelize.INTEGER,
 	discordDisplay: Sequelize.STRING,
@@ -48,9 +51,18 @@ export const Block = sequelize.define('block', {
 });
 Block.sync();
 
-export const DiscordGuildSetting = sequelize.define('discordguildsetting', {
+// Settings for a Discord server
+export const DiscordGuildSetting = sequelize.define('discord_guild_setting', {
 	guildId: Sequelize.INTEGER,
 	setting: Sequelize.STRING,
 	value: Sequelize.STRING
 });
 DiscordGuildSetting.sync();
+
+// Settings for a Discord user
+export const DiscordUserSetting = sequelize.define('discord_user_setting', {
+	userId: Sequelize.INTEGER,
+	setting: Sequelize.STRING,
+	value: Sequelize.STRING
+});
+DiscordUserSetting.sync();
