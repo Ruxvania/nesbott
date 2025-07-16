@@ -28,7 +28,11 @@ export default {
 					}
 				}
 
+			} if (config.tbChannelId.some(id => id == message.channel.id) &&
+			config.discordToTb){
+				data.tb.sendMessage(`${message.author.displayName}: ${message.content}`);
 			}
+
 		}
 
 
