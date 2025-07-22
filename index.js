@@ -98,7 +98,7 @@ const tb = {
 	room: config.tbDefaultRoom,
 	lastMessage: "",
 	chatCooldown: false,
-	chatbot: false,
+	chatbot: config.tbChatbotEnabledByDefault,
 	commandsEnabled: config.tbCommandsEnabled,
 
 	sendMessage: function (message) {
