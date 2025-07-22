@@ -83,7 +83,7 @@ export default {
 
                 data.tb.sendTbMessageToDiscord(message);
 
-                console.log(`[trollbox: ${clean(tb.room)}] ${clean(message.nick)}: ${clean(message.msg)}`);
+                console.log(`[trollbox: ${clean(data.tb.room)}] ${clean(message.nick)}: ${clean(message.msg)}`);
 
                 if (message.msg.split(" ").length >= 4 &&
                     message.msg.split(" ").length <= 25 &&
