@@ -6,6 +6,7 @@ module.exports = {
     ignore_watch: ['node_modules', 'database.sqlite', 'database.sqlite-journal', '.git', 'ecosystem.config.cjs' ],
     min_uptime: 15000,
     max_restarts: 5,
-    max_memory_restart: "1G"
+    max_memory_restart: "1G",
+    cron_restart: "0 * * * *" // Every hour
   }]
 }
