@@ -5,7 +5,7 @@ export default {
 	name: "name",
 	description: "Change the bot's name.",
 	async execute(data, message, args) {
-		if (isArgsVaild(args) == true && !censor(arrayToString(args), "report", "hardbanned", "gayleb")) {
+		if (isArgsVaild(args) == true && !censor(arrayToString(args), "report", "hardbanned")) {
             data.tb.name = arrayToString(args);
             data.tb.socket.emit("user joined", `${data.tb.genName()}`, data.tb.color, "", "");
         } else {
