@@ -52,7 +52,7 @@ export function isStringVaild(string) {
 export function censor(message, omitOrReport, ...filters) {
     const filterRegex = {
         banned: /discord|sonic|fortnite|among us|corona|roblox/gi,
-        hardbanned: /exe|forkie|runkit\.sh|^\*hugs|discord/img,
+        hardbanned: /exe|forkie|runkit\.sh|^\*hugs|discord|big|https/img,
         link: /(?:http[s]?:\/\/.)?(?:www\.)?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/gm,
         gayleb: /^\s*![a-zA-Z]*/gm,
         ping: /@everyone|@here|<@[0-9]+>/gi,
