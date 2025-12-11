@@ -21,6 +21,6 @@ export default {
       commands = commands.trim();
     };
 
-    data.tb.sendMessage(censor(helpHeader + '\n\n' + commands + "\n\n" + helpFooter, "omit", "hardbanned"));
+    data.tb.sendMessage(censor(helpHeader + '\n\n' + commands + "\n\n" + helpFooter, "omit", "tbServerMessageBan"));
   },
 };

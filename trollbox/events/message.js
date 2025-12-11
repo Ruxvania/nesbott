@@ -101,7 +101,7 @@ export default {
                 ) {
 
                     createSplicedMessage(clean(message.msg), TbMessage).then(
-                        function (message) { data.tb.sendMessage(censor(message, "omit", "gayleb")); }, function (error) { console.error(error) }
+                        function (message) { data.tb.sendMessage(message); }, function (error) { console.error(error) }
                     )
 
                 }

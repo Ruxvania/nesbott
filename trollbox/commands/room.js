@@ -5,7 +5,7 @@ export default {
     name: "room",
     description: "Change the bot's room.",
 	async execute(data, message, args) {
-		if (isArgsVaild(args) == true && censor(arrayToString(args), "report", "hardbanned", "gayleb") == false) {
+		if (isArgsVaild(args) == true && censor(arrayToString(args), "report", "tbOfficialClientBan", "tbServerMessageBan") == false) {
             data.tb.room = arrayToString(args);
 
             console.log(data.tb.room);
