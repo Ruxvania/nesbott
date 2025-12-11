@@ -65,7 +65,7 @@ export default {
                     try {
                         await command.execute(data, message, args);
                     } catch (error) {
-                        tb.sendMessage('There was an error while executing this command!');
+                        data.tb.sendMessage('There was an error while executing this command!');
                         console.error(error);
                     }
 
