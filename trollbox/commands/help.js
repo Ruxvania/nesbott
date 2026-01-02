@@ -4,7 +4,7 @@ import { censor } from '../../common-functions.js';
 import config from "../../config.json" with { type: "json" };
 
 export default {
-  cooldown: 30,
+  cooldown: 60,
   name: "help",
   description: 'View all commands and info about the bot.',
   async execute(data, message, args) {
